@@ -87,7 +87,7 @@ func (s *Server) Handler(conn net.Conn) {
 		select {
 		case <-isLive:
 			//当前用户是活跃的，应该重置定时器
-		case <-time.After(time.Second * 10):
+		case <-time.After(time.Second * 600):
 			//关闭连接
 			conn.Close()
 			//退出当前Handler

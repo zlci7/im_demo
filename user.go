@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 
 	"net"
 )
@@ -70,6 +71,23 @@ func (u *User) DoMessage(msg string) {
 			u.Name = newName
 			u.ChanUserMsg <- "您已经更新用户名:" + u.Name + "\n"
 		}
+
+	} else if len(msg) > 4 && msg[:3] == "to|" {
+		//私聊消息格式： to|张三|消息内容
+		//1.获取对方用户名
+		name := strings.Split(msg, "|")[1]
+
+		//2.得到User对象
+		remoteUser, isExist := u.server.OnlineMap[name]
+		if !isExist {
+			u.ChanUserMsg <- "用户不存在\n"
+			return
+		}
+		//3.获取消息内容
+		content := strings.Split(msg, "|")[2]
+
+		//4.发送消息
+		remoteUser.ChanUserMsg <- u.Name + "对您说:" + content + "\n"
 
 	} else {
 		//广播消息
