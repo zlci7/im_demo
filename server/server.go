@@ -70,10 +70,6 @@ func (s *Server) Handler(conn net.Conn) {
 				user.Offline()
 				return
 			}
-			if err != nil {
-				fmt.Println("conn read error:", err)
-				return
-			}
 			//提取用户消息（去除'\n'）
 			msg := string(buf[:n-1])
 			//广播消息
